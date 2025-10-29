@@ -52,7 +52,7 @@ class DownloadDataset:
             print(f"[ERROR] Failed to download dataset: {e}")
             raise
 
-    def verify_file(self, expected_size: int = None) -> bool:
+    def verify_file(self, expected_size: int = 0) -> bool:
         if not self.download_path.exists():
             print("[ERROR] File does not exist.")
             return False
@@ -83,7 +83,7 @@ class DownloadDataset:
 
 
 if __name__ == "__main__":
-    url = os.getenv("DATASET_URL")
+    url = str(os.getenv("DATASET_URL"))
     download_dir = "./datasets"  # Folder where .zip will be stored
     dataset_name = "cat.zip"
 

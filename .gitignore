@@ -3,5 +3,4 @@ __pycache__/
 .env
 cache/
 datasets/
-models/
 .venv/

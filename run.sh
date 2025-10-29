@@ -4,3 +4,4 @@ echo "=== Starting Dataset Downloading pipeline ==="
 
 
 python download_dataset.py
+python train.py

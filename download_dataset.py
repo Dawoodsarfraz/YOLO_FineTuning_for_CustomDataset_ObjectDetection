@@ -4,10 +4,17 @@ import requests
 from pathlib import Path
 from tqdm import tqdm
 from dotenv import load_dotenv
+
 load_dotenv()
 
+
 class DownloadDataset:
-    def __init__(self, url: str, download_dir: str, dataset_name: str,):
+    def __init__(
+        self,
+        url: str,
+        download_dir: str,
+        dataset_name: str,
+    ):
         self.url = url
         self.download_dir = Path(download_dir)
         self.dataset_name = dataset_name
@@ -31,7 +38,7 @@ class DownloadDataset:
             response.raise_for_status()
 
             with open(self.download_path, "wb") as f, tqdm(
-                total=self.expected_size, unit='iB', unit_scale=True, desc="Downloading"
+                total=self.expected_size, unit="iB", unit_scale=True, desc="Downloading"
             ) as t:
                 for chunk in response.iter_content(chunk_size=8192):
                     if chunk:
@@ -56,16 +63,18 @@ class DownloadDataset:
         if expected_size:
             actual_size = self.download_path.stat().st_size
             if actual_size != expected_size:
-                print(f"[ERROR] File size mismatch: expected {expected_size}, got {actual_size}")
+                print(
+                    f"[ERROR] File size mismatch: expected {expected_size}, got {actual_size}"
+                )
                 return False
 
         print("[INFO] File verification passed.")
         return True
-    
+
     def unzip_dataset(self) -> bool:
         if zipfile.is_zipfile(self.download_path):
             print("[INFO] Downloaded file is Zip now Unzip!!")
-            extract_to = self.download_path.with_suffix('')  # ./datasets/file
+            extract_to = self.download_path.with_suffix("")  # ./datasets/file
             with zipfile.ZipFile(self.download_path, "r") as zip_file:
                 zip_file.extractall(extract_to)
         else:
@@ -75,10 +84,12 @@ class DownloadDataset:
 
 if __name__ == "__main__":
     url = os.getenv("DATASET_URL")
-    download_dir = "./datasets"     # Folder where .zip will be stored
+    download_dir = "./datasets"  # Folder where .zip will be stored
     dataset_name = "cat.zip"
 
-    downloader = DownloadDataset(url=url, download_dir=download_dir, dataset_name=dataset_name)
+    downloader = DownloadDataset(
+        url=url, download_dir=download_dir, dataset_name=dataset_name
+    )
     downloader.download()
     downloader.verify_file()
     downloader.unzip_dataset()
